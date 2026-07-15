@@ -11,8 +11,8 @@ async function renderQuotes() {
     }
 
     container.innerHTML = `
-        <div class="flex flex-col md:flex-row h-full">
-            <div class="flex-1 flex flex-col h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800">
+        <div class="flex flex-col md:flex-row h-full overflow-y-auto custom-scrollbar md:overflow-hidden">
+            <div class="flex-1 flex flex-col min-h-[60vh] md:h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800">
                 <div class="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between bg-gray-50 dark:bg-gray-900">
                     <div>
                         <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-1">Nueva Cotización</h2>
