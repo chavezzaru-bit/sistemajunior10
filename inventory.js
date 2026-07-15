@@ -110,9 +110,10 @@ async function loadInventory() {
 
         list.innerHTML = `
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-                <table class="w-full text-left text-sm">
-                    <thead class="bg-gray-50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
-                        <tr>
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left text-sm min-w-[700px]">
+                        <thead class="bg-gray-50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+                            <tr>
                             <th class="px-4 py-3 font-medium">Producto</th>
                             <th class="px-4 py-3 font-medium">Categoría</th>
                             <th class="px-4 py-3 font-medium text-right">Precio</th>
@@ -146,6 +147,7 @@ async function loadInventory() {
                         `).join('')}
                     </tbody>
                 </table>
+                </div>
             </div>
         `;
     } catch (err) {
