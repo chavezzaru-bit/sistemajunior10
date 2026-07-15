@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -85,7 +86,11 @@
 
         <!-- Navigation -->
         <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-2 custom-scrollbar">
-            <button onclick="changeModule('sales')" id="nav-sales" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 font-medium transition-all group">
+            <button onclick="changeModule('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 font-medium transition-all group">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                Inicio
+            </button>
+            <button onclick="changeModule('sales')" id="nav-sales" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-white transition-all group">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                 Punto de Venta
             </button>
@@ -98,6 +103,11 @@
             <button onclick="changeModule('history')" id="nav-history" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-white transition-all group">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 Historial / Recibos
+            </button>
+            
+            <button onclick="changeModule('inventory')" id="nav-inventory" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-white transition-all group">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                Inventario
             </button>
         </nav>
 
@@ -136,8 +146,13 @@
     <main class="flex-1 flex flex-col min-h-full md:h-full relative bg-gray-50/50 dark:bg-gray-900/50 pt-16 pb-20 md:pt-0 md:pb-0">
         <!-- Contenedor Principal -->
         <div class="flex-1 overflow-visible md:overflow-hidden relative w-full min-h-full md:h-full" id="main-container">
+            <!-- Módulo Dashboard -->
+            <div id="module-dashboard" class="module-section active w-full min-h-full md:h-full">
+                <!-- Se inyecta desde dashboard.js -->
+            </div>
+            
             <!-- Módulo Punto de Venta (Sales) -->
-            <div id="module-sales" class="module-section active w-full min-h-full md:h-full">
+            <div id="module-sales" class="module-section w-full min-h-full md:h-full">
                 <!-- Se inyecta desde sales.js -->
             </div>
 
@@ -150,12 +165,21 @@
             <div id="module-history" class="module-section w-full min-h-full md:h-full">
                 <!-- Se inyecta desde receipts.js -->
             </div>
+            
+            <!-- Módulo Inventario -->
+            <div id="module-inventory" class="module-section w-full min-h-full md:h-full">
+                <!-- Se inyecta desde inventory.js -->
+            </div>
         </div>
     </main>
 
     <!-- Bottom Navigation for Mobile -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 z-40 px-6 py-3 flex justify-between items-center pb-safe">
-        <button onclick="changeModule('sales')" id="nav-sales-mobile" class="flex flex-col items-center gap-1 text-emerald-600 transition-colors">
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 z-40 px-2 py-3 flex justify-around items-center pb-safe">
+        <button onclick="changeModule('dashboard')" id="nav-dashboard-mobile" class="flex flex-col items-center gap-1 text-emerald-600 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            <span class="text-[10px] font-medium">Inicio</span>
+        </button>
+        <button onclick="changeModule('sales')" id="nav-sales-mobile" class="flex flex-col items-center gap-1 text-gray-400 hover:text-emerald-500 transition-colors">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
             <span class="text-[10px] font-medium">POS</span>
         </button>
@@ -167,13 +191,19 @@
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             <span class="text-[10px] font-medium">Recibos</span>
         </button>
+        <button onclick="changeModule('inventory')" id="nav-inventory-mobile" class="flex flex-col items-center gap-1 text-gray-400 hover:text-emerald-500 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+            <span class="text-[10px] font-medium">Stock</span>
+        </button>
     </nav>
 
     <!-- Scripts -->
     <script src="app.js"></script>
+    <script src="dashboard.js"></script>
     <script src="sales.js"></script>
     <script src="quotes.js"></script>
     <script src="receipts.js"></script>
+    <script src="inventory.js"></script>
 
 </body>
 </html>

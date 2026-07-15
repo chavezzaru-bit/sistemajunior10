@@ -67,10 +67,12 @@ if (document.readyState === 'loading') {
 
 function iniciarSistema() {
     // Cargar vistas de módulos
+    if(window.renderDashboard) window.renderDashboard();
     if(window.renderSales) window.renderSales();
     if(window.renderQuotes) window.renderQuotes();
     if(window.renderReceipts) window.renderReceipts();
-    changeModule('sales');
+    if(window.renderInventory) window.renderInventory();
+    changeModule('dashboard');
 }
 
 // Cambiar de módulo

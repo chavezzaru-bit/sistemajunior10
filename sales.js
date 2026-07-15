@@ -94,14 +94,10 @@ function renderProductsGrid() {
         <div onclick="addToCart(${p.id})" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:border-emerald-500 cursor-pointer transition-all active:scale-95 group flex flex-col h-full">
             
             <div class="w-full h-32 bg-gray-50 dark:bg-gray-700/50 rounded-xl mb-3 flex items-center justify-center overflow-hidden relative group-hover:bg-gray-100 dark:group-hover:bg-gray-700 transition-colors">
-                ${p.imagen ? 
-                    `<img src="${p.imagen}" class="w-full h-full object-cover">` : 
+                ${p.image_url ? 
+                    `<img src="${p.image_url}" class="w-full h-full object-cover">` : 
                     `<svg class="w-8 h-8 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`
                 }
-                <!-- Botón de cámara visible al hacer hover (desktop) o siempre (mobile) -->
-                <button onclick="event.stopPropagation(); uploadImage(${p.id})" title="Subir foto" class="absolute bottom-2 right-2 p-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur rounded-lg shadow-sm text-gray-500 hover:text-emerald-500 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity z-10 border border-gray-100 dark:border-gray-700">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                </button>
             </div>
 
             <div class="text-[10px] text-emerald-600 font-bold tracking-widest uppercase mb-1">${p.categoria || 'Sin categoría'}</div>
@@ -243,12 +239,25 @@ async function processSale() {
         const { error: detallesError } = await supabaseClient.from('ventas_detalle').insert(detalles);
         if (detallesError) throw detallesError;
 
+        // Descontar stock
+        for (const item of cart) {
+            const currentStock = item.stock;
+            const newStock = Math.max(0, currentStock - item.qty);
+            await supabaseClient.from('productos').update({ stock: newStock }).eq('id', item.id);
+        }
+
         Swal.fire('Venta Guardada', 'Se registró en la nube correctamente.', 'success').then(() => {
             if (window.generateReceiptPDF) {
                 window.generateReceiptPDF(cart, "Venta", ticketId);
             }
             cart = [];
             updateCartUI();
+            
+            // Recargar productos para actualizar stock
+            loadProducts();
+            
+            // Si el inventario está cargado, actualizarlo en fondo
+            if(window.loadInventory) window.loadInventory();
         });
         
     } catch (err) {
