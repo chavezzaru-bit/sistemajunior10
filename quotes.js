@@ -11,7 +11,7 @@ async function renderQuotes() {
     }
 
     container.innerHTML = `
-        <div class="flex flex-col md:flex-row h-full overflow-y-auto custom-scrollbar md:overflow-hidden">
+        <div class="flex flex-col md:flex-row h-auto min-h-full md:h-full md:overflow-hidden">
             <div class="flex-1 flex flex-col min-h-[60vh] md:h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800">
                 <div class="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between bg-gray-50 dark:bg-gray-900">
                     <div>
@@ -33,7 +33,7 @@ async function renderQuotes() {
                     </div>
                 </div>
                 
-                <div class="flex-1 overflow-y-auto p-4 custom-scrollbar bg-gray-50 dark:bg-gray-900/50">
+                <div class="flex-1 overflow-visible md:overflow-y-auto p-4 custom-scrollbar bg-gray-50 dark:bg-gray-900/50">
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4" id="quotes-products-grid">
                         <!-- Renderizado -->
                     </div>

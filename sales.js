@@ -20,7 +20,7 @@ async function renderSales() {
     productsDB = await fetchProducts();
 
     container.innerHTML = `
-        <div class="flex flex-col md:flex-row h-full overflow-y-auto custom-scrollbar md:overflow-hidden">
+        <div class="flex flex-col md:flex-row h-auto min-h-full md:h-full md:overflow-hidden">
             <!-- Panel Principal: Productos -->
             <div class="flex-1 flex flex-col min-h-[60vh] md:h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800">
                 <div class="p-4 border-b border-gray-100 dark:border-gray-800">
@@ -33,7 +33,7 @@ async function renderSales() {
                     </div>
                 </div>
 
-                <div class="flex-1 overflow-y-auto p-4 custom-scrollbar bg-gray-50 dark:bg-gray-900/50">
+                <div class="flex-1 overflow-visible md:overflow-y-auto p-4 custom-scrollbar bg-gray-50 dark:bg-gray-900/50">
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4" id="products-grid">
                         <!-- Cargando... -->
                         <div class="col-span-full text-center text-gray-500 py-10">Cargando productos...</div>
