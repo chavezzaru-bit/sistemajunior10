@@ -231,8 +231,8 @@ window.saveProduct = async function() {
         if (fileInput.files && fileInput.files[0]) {
             const file = fileInput.files[0];
             const fileExt = file.name.split('.').pop();
-            const fileName = \`\${Math.random()}.\${fileExt}\`;
-            const filePath = \`\${fileName}\`;
+            const fileName = `${Math.random()}.${fileExt}`;
+            const filePath = `${fileName}`;
             
             const { error: uploadError } = await supabaseClient.storage
                 .from('productos')
