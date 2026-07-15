@@ -159,77 +159,149 @@ function reprint(id) {
 window.generateReceiptPDF = function(items, type, id, client = "Consumidor Final") {
     const { jsPDF } = window.jspdf;
     
-    // Formato Ticket 80mm (80x200 aprox)
-    const doc = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: [80, 200]
-    });
-
-    let y = 10;
+    // Formato A4 profesional
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     
+    let y = 20;
+    const margin = 20;
+    const width = 210;
+    const right = width - margin;
+    
+    // Utilidades de color
+    const setPrimaryColor = () => doc.setTextColor(37, 99, 235); // Azul profesional
+    const setBlackColor = () => doc.setTextColor(31, 41, 55);
+    const setGrayColor = () => doc.setTextColor(107, 114, 128);
+    const setLineColorPrimary = () => doc.setDrawColor(37, 99, 235);
+    const setLineColorGray = () => doc.setDrawColor(229, 231, 235);
+    
+    // Cabecera de Empresa
+    setPrimaryColor();
+    doc.setFontSize(22);
+    doc.setFont("helvetica", "bold");
+    doc.text("SUPER VENTAS", margin, y);
+    
+    y += 7;
+    setGrayColor();
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text("RUC: 10203040506", margin, y);
+    
+    y += 12;
+    setBlackColor();
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text("SUPER VENTAS", 40, y, { align: "center" });
+    let docType = type === 'cotizacion' ? 'COTIZACIÓN ELECTRÓNICA' : 'BOLETA DE VENTA ELECTRÓNICA';
+    doc.text(docType, margin, y);
     
-    y += 5;
-    doc.setFontSize(9);
+    y += 8;
+    setBlackColor();
+    doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text("RUC: 10203040506", 40, y, { align: "center" });
+    doc.text(`Comprobante: ${id}`, margin, y);
+    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, right, y, { align: "right" });
     
-    y += 5;
-    doc.text("Av. Principal 123, Ciudad", 40, y, { align: "center" });
-
+    // Línea Azul Gruesa
+    y += 6;
+    setLineColorPrimary();
+    doc.setLineWidth(0.8);
+    doc.line(margin, y, right, y);
+    
+    // Datos del Cliente
     y += 10;
+    setBlackColor();
+    doc.text(`Cliente: ${client}`, margin, y);
+    y += 6;
+    doc.text(`Estado: ${type === 'cotizacion' ? 'VIGENTE / PENDIENTE' : 'LISTO / PAGADO'}`, margin, y);
+    
+    // Línea Gris Delgada
+    y += 8;
+    setLineColorGray();
+    doc.setLineWidth(0.3);
+    doc.line(margin, y, right, y);
+    
+    // Cabecera de Tabla
+    y += 10;
+    setBlackColor();
     doc.setFont("helvetica", "bold");
-    doc.text(`${type.toUpperCase()} ${id}`, 40, y, { align: "center" });
-
-    y += 5;
-    doc.setFontSize(8);
-    doc.setFont("helvetica", "normal");
-    doc.text(`Fecha: ${new Date().toLocaleString()}`, 5, y);
-    y += 5;
-    doc.text(`Cliente: ${client}`, 5, y);
-
-    y += 5;
-    doc.text("------------------------------------------------", 40, y, { align: "center" });
-
-    y += 5;
-    doc.setFontSize(8);
-    doc.setFont("helvetica", "bold");
-    doc.text("CANT  DESCRIPCION       TOTAL", 5, y);
+    doc.text("CANT.", margin, y);
+    doc.text("DESCRIPCIÓN", margin + 20, y);
+    doc.text("P. UNIT.", right - 35, y, { align: "right" });
+    doc.text("TOTAL", right, y, { align: "right" });
     
     y += 4;
-    doc.setFont("helvetica", "normal");
+    setLineColorGray();
+    doc.line(margin, y, right, y);
     
+    // Elementos de la Tabla
+    y += 8;
+    doc.setFont("helvetica", "normal");
     let total = 0;
+    
     items.forEach(item => {
         let lineTotal = (item.precio || item.price) * item.qty;
         total += lineTotal;
+        let pUnit = (item.precio || item.price);
         
-        let desc = (item.nombre || item.name).substring(0, 15);
-        doc.text(`${item.qty}`, 5, y);
-        doc.text(`${desc}`, 15, y);
-        doc.text(`$${lineTotal.toFixed(2)}`, 65, y);
-        y += 4;
+        doc.text(`${item.qty}`, margin, y);
+        let desc = (item.nombre || item.name).substring(0, 45); // Truncar si es muy largo
+        doc.text(`${desc}`, margin + 20, y);
+        doc.text(`$${pUnit.toFixed(2)}`, right - 35, y, { align: "right" });
+        doc.text(`$${lineTotal.toFixed(2)}`, right, y, { align: "right" });
+        y += 8;
+        
+        // Si hay muchos ítems, agregar nueva página
+        if (y > 270) {
+            doc.addPage();
+            y = 20;
+        }
     });
-
-    y += 2;
-    doc.text("------------------------------------------------", 40, y, { align: "center" });
-
-    y += 5;
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
-    doc.text(`TOTAL: $${total.toFixed(2)}`, 65, y, { align: "right" });
-
+    
+    // Línea de Cierre de Tabla
+    y += 4;
+    setLineColorGray();
+    doc.line(margin, y, right, y);
+    
+    // Detalle de Pago
     y += 10;
-    doc.setFontSize(8);
-    doc.setFont("helvetica", "italic");
-    doc.text("¡Gracias por su preferencia!", 40, y, { align: "center" });
-
+    doc.setFont("helvetica", "bold");
+    doc.text("Detalle de Pago", margin, y);
+    
+    y += 8;
+    doc.setFont("helvetica", "normal");
+    let subtotal = total / 1.18;
+    let igv = total - subtotal;
+    
+    doc.text("Subtotal", margin, y);
+    doc.text(`$${subtotal.toFixed(2)}`, right, y, { align: "right" });
+    
+    y += 8;
+    doc.text("IGV (18%)", margin, y);
+    doc.text(`$${igv.toFixed(2)}`, right, y, { align: "right" });
+    
+    y += 10;
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text("Total", margin, y);
+    doc.text(`$${total.toFixed(2)}`, right, y, { align: "right" });
+    
+    // Línea Final Azul
+    y += 15;
+    setLineColorPrimary();
+    doc.setLineWidth(0.8);
+    doc.line(margin, y, right, y);
+    
+    // Pie de página
+    y += 8;
+    setGrayColor();
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Representación impresa de la ${docType}.`, margin, y);
+    y += 5;
+    doc.text("Gracias por tu compra - SUPER VENTAS", margin, y);
+    
     doc.save(`${type}_${id}.pdf`);
     
-    if (document.getElementById('module-history').classList.contains('active')) {
-        renderReceipts(); // Recargar desde DB
+    if (document.getElementById('module-history') && document.getElementById('module-history').classList.contains('active')) {
+        if(typeof renderReceipts === 'function') renderReceipts();
     }
 }
