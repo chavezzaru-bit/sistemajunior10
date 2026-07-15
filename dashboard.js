@@ -141,15 +141,16 @@ async function loadDashboardData() {
         // Fetch detalles para Top Productos
         const { data: detalles, error: errDetalles } = await supabaseClient
             .from('ventas_detalle')
-            .select('producto_id, nombre_producto, cantidad');
+            .select('producto_id, cantidad, productos(nombre)');
 
         if (!errDetalles && detalles) {
             let productCounts = {};
             detalles.forEach(d => {
-                if (!productCounts[d.nombre_producto]) {
-                    productCounts[d.nombre_producto] = 0;
+                const nombre = d.productos ? d.productos.nombre : 'Producto Desconocido';
+                if (!productCounts[nombre]) {
+                    productCounts[nombre] = 0;
                 }
-                productCounts[d.nombre_producto] += d.cantidad;
+                productCounts[nombre] += d.cantidad;
             });
 
             // Sort and take top 5
