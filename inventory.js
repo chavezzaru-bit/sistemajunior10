@@ -125,8 +125,8 @@ async function loadInventory() {
                         ${data.map(p => `
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 <td class="px-4 py-3 flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 bg-cover bg-center flex-shrink-0" style="background-image: url('${p.image_url || ''}')">
-                                        ${!p.image_url ? '<svg class="w-5 h-5 text-gray-400 m-auto mt-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>' : ''}
+                                    <div class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 bg-cover bg-center flex-shrink-0" style="background-image: ${p.image_url && p.image_url.startsWith('http') && !p.image_url.includes('[object') ? `url('${p.image_url}')` : 'none'}">
+                                        ${(!p.image_url || !p.image_url.startsWith('http') || p.image_url.includes('[object')) ? '<svg class="w-5 h-5 text-gray-400 m-auto mt-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>' : ''}
                                     </div>
                                     <span class="font-medium text-gray-900 dark:text-gray-200">${p.nombre}</span>
                                 </td>
@@ -189,7 +189,7 @@ window.editProduct = function(id) {
     document.getElementById('prod-image').value = '';
     
     const preview = document.getElementById('img-preview');
-    if (p.image_url) {
+    if (p.image_url && p.image_url.startsWith('http') && !p.image_url.includes('[object')) {
         preview.style.backgroundImage = `url('${p.image_url}')`;
         preview.innerHTML = '';
     } else {
