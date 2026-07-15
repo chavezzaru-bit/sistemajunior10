@@ -60,15 +60,15 @@ async function renderSales() {
                     <div class="space-y-2 mb-4 text-sm">
                         <div class="flex justify-between text-gray-500">
                             <span>Subtotal</span>
-                            <span id="cart-subtotal">$0.00</span>
+                            <span id="cart-subtotal">S/0.00</span>
                         </div>
                         <div class="flex justify-between text-gray-500">
                             <span>IGV (18%)</span>
-                            <span id="cart-tax">$0.00</span>
+                            <span id="cart-tax">S/0.00</span>
                         </div>
                         <div class="flex justify-between text-xl font-bold text-gray-900 dark:text-white pt-2 border-t border-gray-200 dark:border-gray-700">
                             <span>Total</span>
-                            <span id="cart-total">$0.00</span>
+                            <span id="cart-total">S/0.00</span>
                         </div>
                     </div>
                     
@@ -103,7 +103,7 @@ function renderProductsGrid() {
             <div class="text-[10px] text-emerald-600 font-bold tracking-widest uppercase mb-1">${p.categoria || 'Sin categoría'}</div>
             <h4 class="text-sm font-semibold text-gray-800 dark:text-white leading-tight mb-2 flex-1">${p.nombre}</h4>
             <div class="flex items-end justify-between mt-auto pt-2 border-t border-gray-100 dark:border-gray-800">
-                <span class="text-lg font-bold text-gray-900 dark:text-white">$${p.precio.toFixed(2)}</span>
+                <span class="text-lg font-bold text-gray-900 dark:text-white">S/${p.precio.toFixed(2)}</span>
                 <span class="text-xs text-gray-500">Stock: ${p.stock}</span>
             </div>
         </div>
@@ -174,9 +174,9 @@ function updateCartUI() {
     
     if (cart.length === 0) {
         cartContainer.innerHTML = `<div class="text-center text-gray-400 mt-10 text-sm">El carrito está vacío</div>`;
-        document.getElementById('cart-subtotal').innerText = '$0.00';
-        document.getElementById('cart-tax').innerText = '$0.00';
-        document.getElementById('cart-total').innerText = '$0.00';
+        document.getElementById('cart-subtotal').innerText = 'S/0.00';
+        document.getElementById('cart-tax').innerText = 'S/0.00';
+        document.getElementById('cart-total').innerText = 'S/0.00';
         return;
     }
 
@@ -184,7 +184,7 @@ function updateCartUI() {
         <div class="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm">
             <div class="flex-1">
                 <h5 class="text-sm font-semibold text-gray-800 dark:text-white leading-tight">${item.nombre}</h5>
-                <p class="text-xs text-emerald-600 font-bold">$${item.precio.toFixed(2)}</p>
+                <p class="text-xs text-emerald-600 font-bold">S/${item.precio.toFixed(2)}</p>
             </div>
             <div class="flex items-center gap-2 bg-gray-50 dark:bg-gray-900 rounded-lg p-1 border border-gray-200 dark:border-gray-700">
                 <button onclick="updateItemQty(${item.id}, -1)" class="w-6 h-6 flex items-center justify-center rounded text-gray-500 hover:bg-gray-200 transition-colors">-</button>
@@ -198,9 +198,9 @@ function updateCartUI() {
     const tax = subtotal * 0.18;
     const total = subtotal + tax;
 
-    document.getElementById('cart-subtotal').innerText = `$${subtotal.toFixed(2)}`;
-    document.getElementById('cart-tax').innerText = `$${tax.toFixed(2)}`;
-    document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+    document.getElementById('cart-subtotal').innerText = `S/${subtotal.toFixed(2)}`;
+    document.getElementById('cart-tax').innerText = `S/${tax.toFixed(2)}`;
+    document.getElementById('cart-total').innerText = `S/${total.toFixed(2)}`;
 }
 
 async function processSale() {

@@ -101,7 +101,7 @@ async function renderReceipts() {
                                     </td>
                                     <td class="px-6 py-4 text-gray-600 dark:text-gray-300">${doc.client}</td>
                                     <td class="px-6 py-4 text-gray-500">${doc.date}</td>
-                                    <td class="px-6 py-4 text-right font-bold text-gray-900 dark:text-white">$${doc.total.toFixed(2)}</td>
+                                    <td class="px-6 py-4 text-right font-bold text-gray-900 dark:text-white">S/${doc.total.toFixed(2)}</td>
                                     <td class="px-6 py-4 text-center">
                                         <button onclick="reprint('${doc.id}')" class="text-gray-400 hover:text-emerald-500 transition-colors p-2">
                                             <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
@@ -127,7 +127,7 @@ async function renderReceipts() {
                                 </span>
                             </div>
                             <div class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                                $${doc.total.toFixed(2)}
+                                S/${doc.total.toFixed(2)}
                             </div>
                             <div class="flex items-center gap-2 pt-3 border-t border-gray-100 dark:border-gray-800">
                                 <span class="text-xs font-semibold text-gray-500 flex-1">${doc.id}</span>
@@ -245,8 +245,8 @@ window.generateReceiptPDF = function(items, type, id, client = "Consumidor Final
         doc.text(`${item.qty}`, margin, y);
         let desc = (item.nombre || item.name).substring(0, 45); // Truncar si es muy largo
         doc.text(`${desc}`, margin + 20, y);
-        doc.text(`$${pUnit.toFixed(2)}`, right - 35, y, { align: "right" });
-        doc.text(`$${lineTotal.toFixed(2)}`, right, y, { align: "right" });
+        doc.text(`S/${pUnit.toFixed(2)}`, right - 35, y, { align: "right" });
+        doc.text(`S/${lineTotal.toFixed(2)}`, right, y, { align: "right" });
         y += 8;
         
         // Si hay muchos ítems, agregar nueva página
@@ -272,17 +272,17 @@ window.generateReceiptPDF = function(items, type, id, client = "Consumidor Final
     let igv = total - subtotal;
     
     doc.text("Subtotal", margin, y);
-    doc.text(`$${subtotal.toFixed(2)}`, right, y, { align: "right" });
+    doc.text(`S/${subtotal.toFixed(2)}`, right, y, { align: "right" });
     
     y += 8;
     doc.text("IGV (18%)", margin, y);
-    doc.text(`$${igv.toFixed(2)}`, right, y, { align: "right" });
+    doc.text(`S/${igv.toFixed(2)}`, right, y, { align: "right" });
     
     y += 10;
     doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
     doc.text("Total", margin, y);
-    doc.text(`$${total.toFixed(2)}`, right, y, { align: "right" });
+    doc.text(`S/${total.toFixed(2)}`, right, y, { align: "right" });
     
     // Línea Final Azul
     y += 15;

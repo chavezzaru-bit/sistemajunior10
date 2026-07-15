@@ -57,7 +57,7 @@ async function renderQuotes() {
                     <div class="space-y-2 mb-4 text-sm">
                         <div class="flex justify-between text-xl font-bold text-gray-900 dark:text-white pt-2">
                             <span>Total Estimado</span>
-                            <span id="quote-total">$0.00</span>
+                            <span id="quote-total">S/0.00</span>
                         </div>
                     </div>
                     
@@ -84,7 +84,7 @@ function renderQuotesGrid() {
     grid.innerHTML = productsDB.map(p => `
         <div onclick="addToQuote(${p.id})" class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:border-emerald-500 cursor-pointer transition-all active:scale-95">
             <h4 class="text-xs font-semibold text-gray-800 dark:text-white mb-1 truncate">${p.nombre}</h4>
-            <div class="text-sm font-bold text-emerald-600">$${p.precio.toFixed(2)}</div>
+            <div class="text-sm font-bold text-emerald-600">S/${p.precio.toFixed(2)}</div>
         </div>
     `).join('');
 }
@@ -104,7 +104,7 @@ function updateQuoteUI() {
     const container = document.getElementById('quote-items');
     if(quoteCart.length === 0) {
         container.innerHTML = `<div class="text-center text-gray-400 mt-10 text-sm">Agrega productos a la cotización</div>`;
-        document.getElementById('quote-total').innerText = '$0.00';
+        document.getElementById('quote-total').innerText = 'S/0.00';
         return;
     }
 
@@ -113,12 +113,12 @@ function updateQuoteUI() {
             <div class="flex-1 truncate pr-2">
                 <span class="font-bold">${item.qty}x</span> ${item.nombre}
             </div>
-            <div class="font-bold text-emerald-600">$${(item.precio * item.qty).toFixed(2)}</div>
+            <div class="font-bold text-emerald-600">S/${(item.precio * item.qty).toFixed(2)}</div>
         </div>
     `).join('');
 
     const total = quoteCart.reduce((acc, item) => acc + (item.precio * item.qty), 0);
-    document.getElementById('quote-total').innerText = `$${total.toFixed(2)}`;
+    document.getElementById('quote-total').innerText = `S/${total.toFixed(2)}`;
 }
 
 async function processQuote() {

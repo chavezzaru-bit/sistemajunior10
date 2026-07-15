@@ -13,7 +13,7 @@ window.renderDashboard = async function() {
                 <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Ventas de Hoy</p>
-                        <h3 class="text-3xl font-bold text-gray-900 dark:text-white" id="dash-today-total">$0.00</h3>
+                        <h3 class="text-3xl font-bold text-gray-900 dark:text-white" id="dash-today-total">S/0.00</h3>
                         <p class="text-xs text-emerald-500 mt-2 font-medium" id="dash-today-count">0 comprobantes</p>
                     </div>
                     <div class="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/30 rounded-full flex items-center justify-center text-emerald-500">
@@ -24,7 +24,7 @@ window.renderDashboard = async function() {
                 <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Ventas de la Semana</p>
-                        <h3 class="text-3xl font-bold text-gray-900 dark:text-white" id="dash-week-total">$0.00</h3>
+                        <h3 class="text-3xl font-bold text-gray-900 dark:text-white" id="dash-week-total">S/0.00</h3>
                         <p class="text-xs text-blue-500 mt-2 font-medium" id="dash-week-count">0 comprobantes</p>
                     </div>
                     <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-500">
@@ -35,7 +35,7 @@ window.renderDashboard = async function() {
                 <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Ventas del Mes</p>
-                        <h3 class="text-3xl font-bold text-gray-900 dark:text-white" id="dash-month-total">$0.00</h3>
+                        <h3 class="text-3xl font-bold text-gray-900 dark:text-white" id="dash-month-total">S/0.00</h3>
                         <p class="text-xs text-purple-500 mt-2 font-medium" id="dash-month-count">0 comprobantes</p>
                     </div>
                     <div class="w-12 h-12 bg-purple-50 dark:bg-purple-900/30 rounded-full flex items-center justify-center text-purple-500">
@@ -126,13 +126,13 @@ async function loadDashboardData() {
         });
 
         // Actualizar KPIs
-        document.getElementById('dash-today-total').innerText = '$' + todayTotal.toFixed(2);
+        document.getElementById('dash-today-total').innerText = 'S/' + todayTotal.toFixed(2);
         document.getElementById('dash-today-count').innerText = todayCount + ' comprobantes';
         
-        document.getElementById('dash-week-total').innerText = '$' + weekTotal.toFixed(2);
+        document.getElementById('dash-week-total').innerText = 'S/' + weekTotal.toFixed(2);
         document.getElementById('dash-week-count').innerText = weekCount + ' comprobantes';
         
-        document.getElementById('dash-month-total').innerText = '$' + monthTotal.toFixed(2);
+        document.getElementById('dash-month-total').innerText = 'S/' + monthTotal.toFixed(2);
         document.getElementById('dash-month-count').innerText = monthCount + ' comprobantes';
 
         // Renderizar Gráfico
@@ -210,7 +210,7 @@ function renderChart(daysMap) {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Ventas Diarias ($)',
+                label: 'Ventas Diarias (S/)',
                 data: data,
                 backgroundColor: 'rgba(16, 185, 129, 0.8)',
                 hoverBackgroundColor: 'rgba(5, 150, 105, 1)',
@@ -233,7 +233,7 @@ function renderChart(daysMap) {
                     displayColors: false,
                     callbacks: {
                         label: function(context) {
-                            return '$' + context.parsed.y.toFixed(2);
+                            return 'S/' + context.parsed.y.toFixed(2);
                         }
                     }
                 }
@@ -244,7 +244,7 @@ function renderChart(daysMap) {
                     grid: { color: gridColor, drawBorder: false },
                     ticks: {
                         color: textColor,
-                        callback: function(value) { return '$' + value; }
+                        callback: function(value) { return 'S/' + value; }
                     }
                 },
                 x: {

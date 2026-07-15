@@ -131,7 +131,7 @@ async function loadInventory() {
                                     <span class="font-medium text-gray-900 dark:text-gray-200">${p.nombre}</span>
                                 </td>
                                 <td class="px-4 py-3 text-gray-500">${p.categoria || '-'}</td>
-                                <td class="px-4 py-3 text-right font-medium text-gray-900 dark:text-gray-200">$${Number(p.precio).toFixed(2)}</td>
+                                <td class="px-4 py-3 text-right font-medium text-gray-900 dark:text-gray-200">S/${Number(p.precio).toFixed(2)}</td>
                                 <td class="px-4 py-3 text-center">
                                     <span class="px-2.5 py-1 rounded-full text-xs font-medium ${p.stock <= 5 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}">
                                         ${p.stock}
